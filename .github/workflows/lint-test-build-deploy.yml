@@ -26,7 +26,7 @@ concurrency: next-js
 
 jobs:
   # Build job
-  build:
+  lint-test-build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
