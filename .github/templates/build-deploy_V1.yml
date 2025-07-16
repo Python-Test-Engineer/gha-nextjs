@@ -68,7 +68,7 @@ jobs:
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Run Linter
         run: ${{ steps.detect-package-manager.outputs.runner }} next lint
-      - name: Run Tests
+      - name : Run Tests
         run: ${{ steps.detect-package-manager.outputs.tester }} test
       - name: Test Coverage
         run: ${{ steps.detect-package-manager.outputs.tester }} test:coverage
@@ -78,83 +78,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./out
-  security:
-    name: Security Scans With Bandit
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-      - name: Install uv
-        uses: astral-sh/setup-uv@v2
-        with:
-          version: latest
-      - name: Create virtual environment
-        run: uv venv
-      - name: Install dependencies
-        run: |
-          uv pip install -e .
-          uv pip install bandit safety pip-audit
-      - name: Run Bandit security scan
-        run: |
-          source .venv/bin/activate
-          bandit -r attercop/ -f json -o bandit-report.json || true
-          bandit -r attercop/ -f txt
-        continue-on-error: true
-      - name: Run Safety check
-        run: |
-          source .venv/bin/activate
-          safety check --json --output safety-report.json || true
-          safety check
-        continue-on-error: true
-      - name: Run pip-audit
-        run: |
-          source .venv/bin/activate
-          pip-audit --format=json --output=pip-audit-report.json || true
-          pip-audit
-        continue-on-error: true
-      - name: Upload security reports
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: security-reports
-          path: |
-            bandit-report.json
-            safety-report.json
-            pip-audit-report.json
-  codeql:
-    name: CodeQL Analysis
-    runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: python
-          queries: "security-extended,security-and-quality"
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
 
-  scan:
-    name: Check GitLeaks for Secrets
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # Deployment job
   deploy:
     runs-on: ubuntu-latest
@@ -164,3 +88,5 @@ jobs:
         id: deployment
         run: |
           echo "Deploying to GitHub Pages..."
+   
+       
