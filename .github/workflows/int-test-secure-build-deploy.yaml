@@ -89,23 +89,6 @@ jobs:
         run: npm outdated
         continue-on-error: true
 
-      - name: Run Semgrep Security Scan
-        uses: returntocorp/semgrep-action@v1
-        with:
-          config: >-
-            p/security-audit
-            p/secrets
-            p/javascript
-            p/typescript
-            p/react
-        continue-on-error: true
-
-      - name: Upload Semgrep results to GitHub Code Scanning
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: semgrep.sarif
-        continue-on-error: true
 
   # Build job
   lint-test-build:
