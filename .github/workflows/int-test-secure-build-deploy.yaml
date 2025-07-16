@@ -153,7 +153,7 @@ jobs:
       - name: Test Coverage
         run: ${{ steps.detect-package-manager.outputs.tester }} test:coverage
         
-              - name: Build with Next.js
+      - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
         
       - name: Run security headers check
