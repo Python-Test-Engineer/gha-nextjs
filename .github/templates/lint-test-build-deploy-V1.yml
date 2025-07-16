@@ -2,7 +2,7 @@
 #
 # To get started with Next.js see: https://nextjs.org/docs/getting-started
 #
-name: NextJS Lint, Test, Build, and Deploy
+name: lint-test-build-deploy
 
 on:
   # Runs on pushes targeting the default branch
@@ -20,9 +20,7 @@ permissions:
 
 # Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
 # However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
+concurrency: next-js
 
 jobs:
   # Build job
@@ -54,28 +52,19 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - name: Restore cache
-        uses: actions/cache@v4
-        with:
-          path: |
-            .next/cache
-          # Generate a new cache whenever packages or source files change.
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
-          # If source files changed but packages didn't, rebuild from a prior cache.
-          restore-keys: |
-            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json', '**/yarn.lock') }}-
+
       - name: Install dependencies
         run: ${{ steps.detect-package-manager.outputs.manager }} ${{ steps.detect-package-manager.outputs.command }}
       - name: Run Linter
         run: ${{ steps.detect-package-manager.outputs.runner }} next lint
-      - name : Run Tests
+      - name: Run Tests
         run: ${{ steps.detect-package-manager.outputs.tester }} test
       - name: Test Coverage
         run: ${{ steps.detect-package-manager.outputs.tester }} test:coverage
       - name: Build with Next.js
         run: ${{ steps.detect-package-manager.outputs.runner }} next build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v4.6.2
         with:
           path: ./out
 
@@ -88,5 +77,3 @@ jobs:
         id: deployment
         run: |
           echo "Deploying to GitHub Pages..."
-   
-       
