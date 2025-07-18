@@ -191,7 +191,7 @@ jobs:
           has_breaking, has_feature, has_fix = analyze_commits_since_tag(repo, current_version)
 
           print(f":tick: Analysis results:")
-          print(f"  Breaking changes: {has_breaking}")
+          print(f":sparkles:  Breaking changes: {has_breaking}")
           print(f"  New features: {has_feature}")
           print(f"  Bug fixes: {has_fix}")
 
@@ -414,10 +414,10 @@ jobs:
                   notes += "\n".join(other) + "\n\n"
               notes += "## CHANGELOG.md Section\n"
               # Read the latest section from CHANGELOG.md
-              if os.path.exists('CHANGELOG.md'):
-                  with open('CHANGELOG.md', 'a') as f:
-                      f.write("\n\n## " + notes + "\n")
-          
+              if os.path.exists('latest_changelog_section.md'):
+                  with open('latest_changelog_section.md', 'r') as f:
+                      changelog_section = f.read()
+                  notes += changelog_section + "\n\n"
               else:
                   notes += "No CHANGELOG.md section found.\n\n"
 
@@ -459,24 +459,24 @@ jobs:
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
           git push origin "$NEXT_VERSION"
 
-      - name: Create GitHub Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ needs.semantic_release.outputs.next-version }}
-          name: Release ${{ needs.semantic_release.outputs.next-version }}
-          body_path: release_notes.md
-          draft: false
-          prerelease: false
+      # - name: Create GitHub Release
+      #   id: create_release
+      #   uses: softprops/action-gh-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ needs.semantic_release.outputs.next-version }}
+      #     name: Release ${{ needs.semantic_release.outputs.next-version }}
+      #     body_path: release_notes.md
+      #     draft: false
+      #     prerelease: false
 
-      - name: Upload Release Assets (Optional)
-        uses: softprops/action-gh-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ needs.semantic_release.outputs.next-version }}
-          files: ./dist/*  # Adjust path to your build artifacts
-        # Only run if you have artifacts to upload
-        if: false  # Change to true if you want to upload artifacts
+      # - name: Upload Release Assets (Optional)
+      #   uses: softprops/action-gh-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ needs.semantic_release.outputs.next-version }}
+      #     files: ./dist/*  # Adjust path to your build artifacts
+      #   # Only run if you have artifacts to upload
+      #   if: false  # Change to true if you want to upload artifacts
