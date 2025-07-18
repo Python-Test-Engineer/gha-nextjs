@@ -7,9 +7,9 @@ run-name: Template CI/CD Pipeline NODE
 # It includes steps for testing, security scanning, code analysis, and release management.
 
 'on':
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:  # Allow manual triggering
 
 
