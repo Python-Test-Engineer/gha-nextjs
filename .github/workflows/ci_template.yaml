@@ -459,24 +459,24 @@ jobs:
           git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git
           git push origin "$NEXT_VERSION"
 
-      # - name: Create GitHub Release
-      #   id: create_release
-      #   uses: softprops/action-gh-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ needs.semantic_release.outputs.next-version }}
-      #     name: Release ${{ needs.semantic_release.outputs.next-version }}
-      #     body_path: release_notes.md
-      #     draft: false
-      #     prerelease: false
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.semantic_release.outputs.next-version }}
+          name: Release ${{ needs.semantic_release.outputs.next-version }}
+          body_path: release_notes.md
+          draft: false
+          prerelease: false
 
-      # - name: Upload Release Assets (Optional)
-      #   uses: softprops/action-gh-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ needs.semantic_release.outputs.next-version }}
-      #     files: ./dist/*  # Adjust path to your build artifacts
-      #   # Only run if you have artifacts to upload
-      #   if: false  # Change to true if you want to upload artifacts
+      - name: Upload Release Assets (Optional)
+        uses: softprops/action-gh-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.semantic_release.outputs.next-version }}
+          files: ./dist/*  # Adjust path to your build artifacts
+        # Only run if you have artifacts to upload
+        if: false  # Change to true if you want to upload artifacts
