@@ -190,7 +190,7 @@ jobs:
 
           has_breaking, has_feature, has_fix = analyze_commits_since_tag(repo, current_version)
 
-          print(f"Analysis results:")
+          print(f":tick: Analysis results:")
           print(f"  Breaking changes: {has_breaking}")
           print(f"  New features: {has_feature}")
           print(f"  Bug fixes: {has_fix}")
