@@ -9,9 +9,9 @@ run-name: build-codeql-bump-version-and-release-${{ github.sha }}
 # Conventional Commits are used to determine the next version based on commit messages.
 
 'on':
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
   workflow_dispatch:  # Allow manual triggering
 
 
