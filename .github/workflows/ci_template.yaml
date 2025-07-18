@@ -414,10 +414,10 @@ jobs:
                   notes += "\n".join(other) + "\n\n"
               notes += "## CHANGELOG.md Section\n"
               # Read the latest section from CHANGELOG.md
-              if os.path.exists('latest_changelog_section.md'):
-                  with open('latest_changelog_section.md', 'r') as f:
-                      changelog_section = f.read()
-                  notes += changelog_section + "\n\n"
+              if os.path.exists('CHANGELOG.md'):
+                  with open('CHANGELOG.md', 'a') as f:
+                      f.write("\n\n## " + notes + "\n")
+          
               else:
                   notes += "No CHANGELOG.md section found.\n\n"
 
